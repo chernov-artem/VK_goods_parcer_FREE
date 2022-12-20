@@ -1,4 +1,4 @@
-""" Парсит товары из группы ВК сохраняет их в текстовый файл вида: Название;цена;url  """
+""" Парсит товары из группы ВК сохраняет их в текстовый файл вида: Название;цена;url   """
 
 
 import vk_api
@@ -11,7 +11,6 @@ session = vk_api.VkApi(token=my_token)
 vk = session.get_api()
 my_vk_id = 602265325
 group_id_input = int(input("Введите id сообщества ВК: "))
-# my_owner_group_id = -215973925
 my_owner_group_id = 0 - group_id_input
 
 def normal_price(s) -> int:
