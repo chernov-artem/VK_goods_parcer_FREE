@@ -1,17 +1,34 @@
 """ Парсит товары из группы ВК сохраняет их в текстовый файл вида: Название;цена;url   """
 
-
 import vk_api
 import time
 import datetime
+import tkinter
+from tkinter import ttk
+from tkinter import *
 
-my_token = "vk1.a.hCMkL9QL-HrpGET2XcKoxPqMdy-zWWz4jM9UMKEu3NGE60rTZ1Fd-1K15rWVzkPAhj4DtCFsKbAhM0YWJVnKjGeJRJcNXtUYqvq5FQBZqQwYuHuHV9I5536M4LiyqEU6A0tp_VwMbPc-rylVvyAUaGX5lIzk_OmeKY7VJVaEb0Pk8Fm47-ot3PqX0NVxoEaZY8XWgpla33zX7jU0C59jWQ"
 
-session = vk_api.VkApi(token=my_token)
-vk = session.get_api()
-my_vk_id = 602265325
-group_id_input = int(input("Введите id сообщества ВК: "))
-my_owner_group_id = 0 - group_id_input
+def gui_start():
+    canvas.pack()
+    frame.place(relx=0.01, rely=0.01, relwidth=0.98, relheight=0.97)
+    btn.place(relx=0.21, rely=0.37, height=25, width=85)
+    text_area.place(relx=0.05, rely=0.02, height=50, width=245)
+    text_area3.place(relx=0.03, rely=0.46, height=60, width=265)
+    entry.place(relx=0.04, rely=0.22, height=20, width=140)
+
+
+def btn_click():
+    group_id = 0 - int(entry.get())
+    res = market_get_goods_dict(group_id)
+    file_name = f"goods_id{str(group_id)[1:]}_{str(datetime.datetime.now())[:-7].replace(' ', '_').replace(':', '-')}.txt"
+    with open(str(file_name), "a+") as file:
+        file.write("Muffin программы для бизнеса https://vk.com/muffin_programs_for_business\n\n")
+        file.write("Содержание строчек:\n")
+        file.write("Название товара;цена;ссылка на товар\n\n")
+        for key, value in res.items():
+            file.write(f"{value[0]};{value[1]};https://vk.com/market-215973925?w=product-215973925_{key}\n")
+    root.quit()
+
 
 def normal_price(s) -> int:
     """Получает цену из VK Api и возвращает её"""
@@ -21,6 +38,7 @@ def normal_price(s) -> int:
         price0 = s.split()
         price = int(price0[0] + price0[1][:-2])
         return price
+
 
 def market_get_goods_dict(group_id):
     '''парсим товары группы и добавляем их все в словарь {id_товара : ['Название_товара', цена товара]}'''
@@ -59,12 +77,30 @@ def market_get_goods_dict(group_id):
     return goods_dict
 
 
+with open("token.txt", "r") as file:
+    my_token = file.read()
+
+# Блок GUI
+root = Tk()
+root['bg'] = '#fafafa'
+root.title('Бэкап товаров группы ВК v 1.0 ')
+root.geometry('340x280')
+
+# переменные GUI
+canvas = Canvas(root, height=640, width=480)
+frame = Frame(root, bg='#c3c3c3')
+btn = Button(frame, text='Запустить', bg='white', command=btn_click)
+text_area = Label(frame, justify=LEFT, width=80, height=20, bg='#c3c3c3')
+text_area['text'] = 'Вставьте id группы вконтакте,\nнажав Ctrl + V в английской раскладке [EN]:'
+text_area3 = Label(frame, width=50, height=20, bg='#c3c3c3')
+text_area3['text'] = 'После нажатия на кнопку\n результат будет записан в файл в этой же папке'
+entry = Entry(frame, bg='white')
+
+# блок VK-api
+session = vk_api.VkApi(token=my_token)
+vk = session.get_api()
+gui_start()
+root.mainloop()
+
 if __name__ == '__main__':
-    res = market_get_goods_dict(my_owner_group_id)
-    file_name = f"goods_id{str(my_owner_group_id)[1:]}_{str(datetime.datetime.now())[:-7].replace(' ' ,'_').replace(':' ,'-')}.txt"
-    with open(str(file_name), "a+") as file:
-        file.write("Muffin программы для бизнеса https://vk.com/muffin_programs_for_business\n\n")
-        file.write("Содержание строчек:\n")
-        file.write("Название товара;цена;ссылка на товар\n\n")
-        for key, value in res.items():
-            file.write(f"{value[0]};{value[1]};https://vk.com/market-215973925?w=product-215973925_{key}\n")
+    gui_start()
