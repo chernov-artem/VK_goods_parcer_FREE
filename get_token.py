@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter import ttk
 import webbrowser
 
-request_token = "https://oauth.vk.com/authorize?client_id=51502375&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=135593988&response_type=token&v=5.131&state=123456"
+request_token = "https://oauth.vk.com/authorize?client_id=51495919&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=135593988&response_type=token&v=5.131&state=123456"
 
 
 def btn_click():
