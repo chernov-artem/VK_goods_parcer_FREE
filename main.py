@@ -26,7 +26,10 @@ def btn_click():
         file.write("Содержание строчек:\n")
         file.write("Название товара;цена;ссылка на товар\n\n")
         for key, value in res.items():
-            file.write(f"{value[0]};{value[1]};https://vk.com/market-215973925?w=product-215973925_{key}\n")
+            try:
+                file.write(f"{value[0]};{value[1]};https://vk.com/market{group_id}?w=product{group_id}_{key}\n")
+            except:
+                file.write(f"{value[0][:-2]};{value[1]};https://vk.com/market{group_id}?w=product{group_id}_{key}\n")
     root.quit()
 
 
